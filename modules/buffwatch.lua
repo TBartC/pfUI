@@ -75,27 +75,45 @@ pfUI:RegisterModule("buffwatch", "vanilla:tbc", function ()
   end
 
   local function GetBuffData(unit, id, type, selfdebuff)
-    if unit == "player" then
-      local bid = GetPlayerBuff(PLAYER_BUFF_START_ID+id, type)
-      local stacks = GetPlayerBuffApplications(bid)
-      local remaining = GetPlayerBuffTimeLeft(bid)
-      local texture = GetPlayerBuffTexture(bid)
-      local name
+  if unit == "player" then
+    local bid = GetPlayerBuff(PLAYER_BUFF_START_ID+id, type)
+    local stacks = GetPlayerBuffApplications(bid)
+    local remaining = GetPlayerBuffTimeLeft(bid)
+    local texture = GetPlayerBuffTexture(bid)
+    local name
 
-      if texture then
-        scanner:SetPlayerBuff(bid)
-        name = scanner:Line(1)
-      end
-
-      return remaining, texture, name, stacks
-    elseif libdebuff and selfdebuff then
-      local name, rank, texture, stacks, dtype, duration, timeleft = libdebuff:UnitOwnDebuff(unit, id)
-      return timeleft, texture, name, stacks
-    elseif libdebuff then
-      local name, rank, texture, stacks, dtype, duration, timeleft = libdebuff:UnitDebuff(unit, id)
-      return timeleft, texture, name, stacks
+    if texture then
+      scanner:SetPlayerBuff(bid)
+      name = scanner:Line(1)
     end
+
+    return remaining, texture, name, stacks
+
+  elseif libdebuff and selfdebuff and libdebuff.UnitOwnDebuff then
+    local name, rank, texture, stacks, dtype, duration, timeleft = libdebuff:UnitOwnDebuff(unit, id)
+    return timeleft, texture, name, stacks
+
+  elseif libdebuff and libdebuff.UnitDebuff then
+    local name, rank, texture, stacks, dtype, duration, timeleft = libdebuff:UnitDebuff(unit, id)
+    return timeleft, texture, name, stacks
+
+  else
+    local name, rank, texture, stacks, dtype, duration, expirationTime
+
+    if type == "HARMFUL" then
+      name, rank, texture, stacks, dtype, duration, expirationTime = UnitDebuff(unit, id)
+    else
+      name, rank, texture, stacks, dtype, duration, expirationTime = UnitBuff(unit, id)
+    end
+
+    local timeleft = 0
+    if expirationTime and expirationTime > 0 then
+      timeleft = expirationTime - GetTime()
+    end
+
+    return timeleft, texture, name, stacks or 0
   end
+end
 
   local function StatusBarOnClick()
     if arg1 == "LeftButton" then
