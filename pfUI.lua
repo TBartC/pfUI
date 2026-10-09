@@ -112,8 +112,12 @@ function pfUI:UpdateColors()
     end})
   end
 
-  -- TBC 2.4.3 lacks the default Death Knight class color.
-  if pfUI.expansion == "tbc" and RAID_CLASS_COLORS and not RAID_CLASS_COLORS["DEATHKNIGHT"] then
+  -- tbcsandbox Death Knight backport: TBC's global class-color table has no
+  -- class 6 entry. pfUI assumes every UnitClass token resolves here, so the
+  -- canonical DK token would otherwise produce nil color errors (e.g.
+  -- SkinButton). Keep native client values if a later client already has one.
+  RAID_CLASS_COLORS = RAID_CLASS_COLORS or {}
+  if not RAID_CLASS_COLORS["DEATHKNIGHT"] then
     RAID_CLASS_COLORS["DEATHKNIGHT"] = { r = 0.77, g = 0.12, b = 0.23, colorStr = "ffc41f3b" }
   end
 end
