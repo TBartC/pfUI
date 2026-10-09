@@ -111,6 +111,11 @@ function pfUI:UpdateColors()
       return { r = 0.6,  g = 0.6,  b = 0.6,  colorStr = "ff999999" }
     end})
   end
+
+  -- TBC 2.4.3 lacks the default Death Knight class color.
+  if pfUI.expansion == "tbc" and RAID_CLASS_COLORS and not RAID_CLASS_COLORS["DEATHKNIGHT"] then
+    RAID_CLASS_COLORS["DEATHKNIGHT"] = { r = 0.77, g = 0.12, b = 0.23, colorStr = "ffc41f3b" }
+  end
 end
 
 function pfUI:UpdateFonts()
