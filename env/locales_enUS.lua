@@ -3,6 +3,7 @@ pfUI_locale["enUS"] = {}
 pfUI_locale["enUS"]["class"] = {
   ["Warlock"] = "WARLOCK",
   ["Warrior"] = "WARRIOR",
+  ["Death Knight"] = "DEATHKNIGHT",
   ["Hunter"] = "HUNTER",
   ["Mage"] = "MAGE",
   ["Priest"] = "PRIEST",
