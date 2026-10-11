@@ -19,7 +19,7 @@ pfUI:RegisterModule("socialmod", "vanilla:tbc", function ()
 
         if name then
           if class then
-            local color = RAID_CLASS_COLORS[class]
+            local color = RAID_CLASS_COLORS[class] or NORMAL_FONT_COLOR
             local classicon = _G["GuildFrameButton"..i].classicon
             local coords = CLASS_ICON_TCOORDS[class]
 
@@ -172,7 +172,7 @@ pfUI:RegisterModule("socialmod", "vanilla:tbc", function ()
         if class then
           local classicon = _G["WhoFrameButton"..i].classicon
           local coords = CLASS_ICON_TCOORDS[class]
-          local color = RAID_CLASS_COLORS[class]
+          local color = RAID_CLASS_COLORS[class] or NORMAL_FONT_COLOR
 
           -- do we have classicons? (skin enabled?)
           if classicon then
